@@ -1,34 +1,36 @@
 <template>
 	<view>
-		<view v-if="!isload">
-			<!-- 部门标签 -->
-			<tag-page 
-				:crumbsList="tag.tagList" 
-				:scrollIndex="tag.scrollIndex"
-				@crumbsClick="crumbsClick"
-			>
-			</tag-page>
-			<!-- 部门列表 -->
-			<depart-page
-				:departList="depart.departList"
-				@departClick="departClick"
-				@checkItem="departCheckItem"
-			 >
-			</depart-page>
-			<!-- 人员列表 -->
-			<man-page 
-				:manList="mans.manList" 
-				:loadText="mans.loadText"
-				:loadstatus="mans.loadstatus"
-				@manCheckItem="manCheckItem"
-			>
-			</man-page>
-		</view>
-		
-		<view class="load" v-else>
-			<!-- 加载动画 -->
-			<u-loading mode="flower" :show="isload" size="88"></u-loading>
-		</view>
+		<scroll-view :style="{height: swiper.winHeight + 'rpx'}" scroll-y @scrolltolower="onreachBottom">
+			<view v-if="!isload">
+				<!-- 部门标签 -->
+				<tag-page 
+					:crumbsList="tag.tagList" 
+					:scrollIndex="tag.scrollIndex"
+					@crumbsClick="crumbsClick"
+				>
+				</tag-page>
+				<!-- 部门列表 -->
+				<depart-page
+					:departList="depart.departList"
+					@departClick="departClick"
+					@checkItem="departCheckItem"
+				 >
+				</depart-page>
+				<!-- 人员列表 -->
+				<man-page 
+					:manList="mans.manList" 
+					:loadText="mans.loadText"
+					:loadstatus="mans.loadstatus"
+					@manCheckItem="manCheckItem"
+				>
+				</man-page>
+			</view>
+			
+			<view class="load" v-else>
+				<!-- 加载动画 -->
+				<u-loading mode="flower" :show="isload" size="88"></u-loading>
+			</view>
+		</scroll-view>
 		
 		<!-- 底部悬浮框选择 -->
 		<view class="check-bottom" v-if="isLimit || isAdmin">
@@ -86,6 +88,10 @@
 				isModal: false,
 				saveCheck: false,  // 全选储存状态
 				allCheck: false, // 全选显示状态
+				swiper: {
+					swiperTop: 0,
+					winHeight: 0
+				}
 			}
 		},
 		components: {
@@ -95,10 +101,8 @@
 			SureModal
 		},
 		mounted () {
-			const userInfo = uni.getStorageSync('userInfo')
-			this.isLimit = userInfo.isSurfingControll
-			this.isAdmin = userInfo.isAdmin
 			this.getAjax ()
+			this.statusHeight () 
 		},
 		computed: {
 			checkTxt () {
@@ -110,6 +114,23 @@
 			},
 		},
 		methods: {
+			// scroll-view高度更改
+			statusHeight () {
+				const userInfo = uni.getStorageSync('userInfo')
+				this.isLimit = userInfo.isSurfingControll
+				this.isAdmin = userInfo.isAdmin
+				this.isAdmin ? this.swiper.swiperTop = 88 : this.swiper.swiperTop = 0
+				var that = this;
+				uni.getSystemInfo({
+					success: function(res) {
+						var clientHeight = res.windowHeight,
+							clientWidth = res.windowWidth,
+							rpxU = 750 / clientWidth;
+						var calc = parseInt(clientHeight * rpxU - that.swiper.swiperTop);
+						that.swiper.winHeight = calc
+					}
+				});
+			},
 			// 菜单栏点击
 			crumbsClick (id) {
 				this.pubDepart (id)
@@ -292,8 +313,17 @@
 			},
 			closeClick (val) {
 				this.isModal = false
-			}
-		}
+			},
+			// scroll-view到底部加载更多
+			onreachBottom() {
+				// 所在位置组织结构
+				if(!this.mans.isNotMan) {
+					this.mans.loadstatus = 'loading'
+					this.offset += 10
+					this.getAjax () 
+				}
+			},
+		},
 	}
 </script>
 
@@ -309,6 +339,7 @@
 	position: fixed;
 	bottom: 0;
 	left: 0;
+	right: 0;
 	width: 100%;
 	height: 100rpx;
 	background-color: white;

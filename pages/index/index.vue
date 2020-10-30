@@ -22,14 +22,9 @@
 			@animationfinish="animationfinish"
 		>
 			<swiper-item>
-				<!-- .divider解决iphone6s首次加载不显示net-item组件内容问题 -->
-				<view class="divider"></view>  
-				<scroll-view :style="{height: swiper.winHeight + 'rpx'}" scroll-y @scrolltolower="onreachBottom">
-					<net-item ref="items"></net-item>
-				</scroll-view>
+				<net-item></net-item>
 			</swiper-item>
 			<swiper-item v-if="isAdmin">
-				<view class="divider"></view>
 				<scroll-view :style="{height: swiper.winHeight + 'rpx'}" scroll-y @scrolltolower="onreachBottom">
 					<limit-item ref="limit"></limit-item>
 				</scroll-view>
@@ -78,20 +73,11 @@
 			},
 			// scroll-view到底部加载更多
 			onreachBottom() {
-				if(this.swiper.swiperCurrent === 0) {
-					// 所在位置组织结构
-					if(!this.$refs.items.mans.isNotMan) {
-						this.$refs.items.mans.loadstatus = 'loading'
-						this.$refs.items.offset += 10
-						this.$refs.items.getAjax () 
-					}
-				} else {
-					// 所在位置管理权限分配
-					if(!this.$refs.limit.mans.isNotMan) {
-						this.$refs.limit.mans.loadstatus = 'loading'
-						this.$refs.limit.offset += 10
-						this.$refs.limit.getAjax () 
-					}
+				// 所在位置管理权限分配
+				if(!this.$refs.limit.mans.isNotMan) {
+					this.$refs.limit.mans.loadstatus = 'loading'
+					this.$refs.limit.offset += 10
+					this.$refs.limit.getAjax () 
 				}
 			},
 			transition(e) {
@@ -146,10 +132,5 @@
 		position: fixed;
 		left: 0;
 		width: 100%;
-	}
-	.divider {
-		width: 100%;
-		height: 1px;
-		background-color: white;
 	}
 </style>

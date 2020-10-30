@@ -55,7 +55,8 @@
 <style lang="scss" scoped>
 	.man {
 		width: 95%;
-		margin: 0 auto 100rpx;
+		margin: 0 auto;
+		padding-bottom: 100rpx;
 		.man-item {
 			width: 100%;
 			height: 150rpx;

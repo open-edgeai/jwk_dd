@@ -2,8 +2,8 @@
     "name" : "极网控",
     "appid" : "__UNI__0B6E5FE",
     "description" : "",
-    "versionName" : "1.0.5",
-    "versionCode" : 105,
+    "versionName" : "1.0.6",
+    "versionCode" : 106,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -80,7 +80,7 @@
         "devServer" : {
             "https" : false
         },
-        "template" : "",
+        "template" : "template.h5.html",
         "router" : {
             "mode" : "history",
             "base" : "/"
