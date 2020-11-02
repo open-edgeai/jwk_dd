@@ -54,11 +54,11 @@
 	import ManPage from './NetCom/ManList.vue'
 	import SureModal from './NetCom/SureModal.vue'
 	import API from '../../util/api.js'
+	import swiperMixin from '../../minxin/swiperHe.js'
 	export default {
+		mixins: [swiperMixin],
 		data () {
 			return { 
-				isAdmin: false,// 是否为管理员
-				isLimit: false,// 是否拥有控制权限
 				isload: true,  // 加载状态
 				offset: 0,  
 				tag: {
@@ -88,10 +88,6 @@
 				isModal: false,
 				saveCheck: false,  // 全选储存状态
 				allCheck: false, // 全选显示状态
-				swiper: {
-					swiperTop: 0,
-					winHeight: 0
-				}
 			}
 		},
 		components: {
@@ -102,7 +98,6 @@
 		},
 		mounted () {
 			this.getAjax ()
-			this.statusHeight () 
 		},
 		computed: {
 			checkTxt () {
@@ -114,23 +109,6 @@
 			},
 		},
 		methods: {
-			// scroll-view高度更改
-			statusHeight () {
-				const userInfo = uni.getStorageSync('userInfo')
-				this.isLimit = userInfo.isSurfingControll
-				this.isAdmin = userInfo.isAdmin
-				this.isAdmin ? this.swiper.swiperTop = 88 : this.swiper.swiperTop = 0
-				var that = this;
-				uni.getSystemInfo({
-					success: function(res) {
-						var clientHeight = res.windowHeight,
-							clientWidth = res.windowWidth,
-							rpxU = 750 / clientWidth;
-						var calc = parseInt(clientHeight * rpxU - that.swiper.swiperTop);
-						that.swiper.winHeight = calc
-					}
-				});
-			},
 			// 菜单栏点击
 			crumbsClick (id) {
 				this.pubDepart (id)

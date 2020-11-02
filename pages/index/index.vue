@@ -25,9 +25,7 @@
 				<net-item></net-item>
 			</swiper-item>
 			<swiper-item v-if="isAdmin">
-				<scroll-view :style="{height: swiper.winHeight + 'rpx'}" scroll-y @scrolltolower="onreachBottom">
-					<limit-item ref="limit"></limit-item>
-				</scroll-view>
+				<limit-item ref="limit"></limit-item>
 			</swiper-item>
 		</swiper>
 	</view>
@@ -37,7 +35,9 @@
 	import * as dd from 'dingtalk-jsapi';
 	import NetItem from '../../components/index/NetItem.vue'
 	import LimitItem from '../../components/index/LimitItem.vue'
+	import swiperMixin from '../../minxin/swiperHe.js'
 	export default {
+		mixins: [swiperMixin],
 		data() {
 			return {
 				tabs: [{ 
@@ -46,39 +46,15 @@
 					name: '管理权限分配'
 				}],  
 				current: 0, // tabs组件的current值，表示当前活动的tab选项
-				swiper: {
-					swiperCurrent: 0, // swiper当前索引
-					winHeight: 0,  // swiper高度
-					swiperTop: 88,  // swiper顶部距离
-				},
-				isAdmin: true,
 			}
 		},
 		components: {
 			NetItem,
 			LimitItem
 		},
-		created () {
-			this.statusFun ()
-		},
 		methods: {
-			statusFun () {
-				let userInfo = uni.getStorageSync('userInfo')
-				this.isAdmin = userInfo.isAdmin
-				this.isAdmin ? this.swiper.swiperTop = 88 : this.swiper.swiperTop = 0
-				this.swiperHeFun(this.swiper.swiperTop)
-			},
 			tabsChange(index) {
 				this.swiper.swiperCurrent = index;
-			},
-			// scroll-view到底部加载更多
-			onreachBottom() {
-				// 所在位置管理权限分配
-				if(!this.$refs.limit.mans.isNotMan) {
-					this.$refs.limit.mans.loadstatus = 'loading'
-					this.$refs.limit.offset += 10
-					this.$refs.limit.getAjax () 
-				}
 			},
 			transition(e) {
 				if(this.$refs.uTabs) {
@@ -93,19 +69,6 @@
 					this.swiper.swiperCurrent = current;
 					this.current = current;
 				}
-			},
-			// swiper高度
-			swiperHeFun(num) {
-				var that = this;
-				uni.getSystemInfo({
-					success: function(res) {
-						var clientHeight = res.windowHeight,
-							clientWidth = res.windowWidth,
-							rpxU = 750 / clientWidth;
-						var calc = parseInt(clientHeight * rpxU - num);
-						that.swiper.winHeight = calc
-					}
-				});
 			},
 		},
 		onShow () {

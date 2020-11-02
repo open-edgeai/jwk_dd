@@ -1,31 +1,33 @@
 <template>
 	<view>
-		<view v-if="!isload">
-			<tag-page
-				:crumbsList="tag.tagList" 
-				:scrollIndex="tag.scrollIndex"
-				@crumbsClick="crumbsClick"
-			>
-			</tag-page>
-			<depart-page
-				:departList="depart.departList"
-				@departClick="departClick"
-			 >
-			</depart-page>
-			<!-- 人员列表 -->
-			<man-page 
-				:manList="mans.manList" 
-				:loadText="mans.loadText"
-				:loadstatus="mans.loadstatus"
-				@limitChange="limitChange"
-				@checkChange="checkChange"
-			>
-			</man-page>
-		</view>
-		<view class="load" v-else>
-			<!-- 加载 -->
-			<u-loading mode="flower" :show="isload" size="88"></u-loading>
-		</view>
+		<scroll-view :style="{height: swiper.winHeight + 'rpx'}" scroll-y @scrolltolower="onreachBottom">
+			<view v-if="!isload">
+				<tag-page
+					:crumbsList="tag.tagList" 
+					:scrollIndex="tag.scrollIndex"
+					@crumbsClick="crumbsClick"
+				>
+				</tag-page>
+				<depart-page
+					:departList="depart.departList"
+					@departClick="departClick"
+				 >
+				</depart-page>
+				<!-- 人员列表 -->
+				<man-page 
+					:manList="mans.manList" 
+					:loadText="mans.loadText"
+					:loadstatus="mans.loadstatus"
+					@limitChange="limitChange"
+					@checkChange="checkChange"
+				>
+				</man-page>
+			</view>
+			<view class="load" v-else>
+				<!-- 加载 -->
+				<u-loading mode="flower" :show="isload" size="88"></u-loading>
+			</view>
+		</scroll-view>
 	</view>
 </template>
 
@@ -34,7 +36,9 @@
 	import DepartPage from './LimitCom/DepartMent.vue'
 	import ManPage from './LimitCom/ManList.vue'
 	import API from '../../util/api.js'
+	import swiperMixin from '../../minxin/swiperHe.js'
 	export default {
+		mixins: [swiperMixin],
 		data () {
 			return {
 				isload: true,  // 加载状态
@@ -159,6 +163,15 @@
 				}).catch(()=> {
 					this.mans.manList[index].isExamine = !e;
 				})
+			},
+			// scroll-view到底部加载更多
+			onreachBottom() {
+				// 所在位置管理权限分配
+				if(!this.mans.isNotMan) {
+					this.mans.loadstatus = 'loading'
+					this.offset += 10
+					this.getAjax () 
+				}
 			},
 		}
 	}
