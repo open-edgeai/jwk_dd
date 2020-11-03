@@ -12,11 +12,12 @@
 #### 项目结构
 
 1.  components 组件
-2.  node_modules 项目集成插件 
-3.  pages / editSite '管理员参数编辑' / index '首页'  / myHome '我的'  /  star '启动页'
-4.  static 静态图片
-5.  unpackage  打包文件
-6.  util / common.js 公共js / api.js 请求js
+2.  mixin / swiperHe.js 计算首页swiper组件高度的公共方法
+3.  node_modules 项目集成插件 
+4.  pages / editSite '管理员参数编辑' / index '首页'  / myHome '我的'  /  star '启动页'
+5.  static 静态图片
+6.  unpackage  打包文件
+7.  util / common.js 公共js / api.js 请求js
 
 
 #### 安装教程
@@ -25,5 +26,5 @@
 
 #### 参与贡献
 
-1.  一极科技有限公司开发团队
+1.  重庆一极科技有限公司开发团队
 

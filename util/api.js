@@ -22,7 +22,7 @@ function creatRequest(url, method, data, isload = true, loadMsg) {
 				if (isload) uni.hideLoading()
 				if (res.statusCode == 200) {
 					resolve(res.data)
-				} else if (res.statusCode == 301) {
+				} else if (res.statusCode == 210) {
 					uni.showToast({
 						title: '登录加载中...',
 						icon: 'none'
