@@ -39,8 +39,10 @@
 	import swiperMixin from '../../minxin/swiperHe.js'
 	export default {
 		mixins: [swiperMixin],
+		props: ["tabIndex"],
 		data () {
 			return {
+				isInit: true,  
 				isload: true,  // 加载状态
 				offset: 0,
 				tag: {
@@ -68,8 +70,12 @@
 			DepartPage,
 			ManPage
 		},
-		mounted () {
-			this.getAjax () 
+		watch: {
+			tabIndex (newVal) {
+				if(newVal == 1) {
+					this.isInit ? this.getAjax () : ''
+				}
+			}
 		},
 		methods: {
 			// 菜单栏点击
@@ -93,6 +99,7 @@
 			},
 			// 上网管理请求
 			getAjax () {
+				this.isInit = false
 				let data = {
 					department_id: this.depart.id,
 					offset: this.offset,

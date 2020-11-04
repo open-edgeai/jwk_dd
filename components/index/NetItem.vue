@@ -57,6 +57,7 @@
 	import swiperMixin from '../../minxin/swiperHe.js'
 	export default {
 		mixins: [swiperMixin],
+		props: ["tabIndex"],
 		data () {
 			return { 
 				isload: true,  // 加载状态

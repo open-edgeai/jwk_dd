@@ -25,7 +25,7 @@
 				<net-item></net-item>
 			</swiper-item>
 			<swiper-item v-if="isAdmin">
-				<limit-item ref="limit"></limit-item>
+				<limit-item :tabIndex="current"></limit-item>
 			</swiper-item>
 		</swiper>
 	</view>
